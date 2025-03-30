@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Detection Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Object Detection Settings</h1>
+    
+    <div>
+        <img src="{{ url_for('video_feed') }}" width="640" height="480">
+    </div>
+    
+
+    <form id="settings-form">
+        <label><input type="checkbox" id="detect_person" checked> Detect Person</label><br>
+        <label><input type="checkbox" id="detect_animal"> Detect Animals</label><br>
+        <label><input type="checkbox" id="detect_property"> Detect Properties</label><br>
+        <label><input type="checkbox" id="sound_enabled" checked> Enable Warning Sound</label><br>
+        <button type="submit">Apply Settings</button>
+    </form>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
