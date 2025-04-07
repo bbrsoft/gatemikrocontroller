@@ -23,6 +23,7 @@ try:
             GPIO.output(BUZZER_PIN, GPIO.LOW)
             time.sleep(1)
         else:
+            print("Tidak ada gerakan.")
             GPIO.output(BUZZER_PIN, GPIO.LOW)
             time.sleep(0.1)
 except KeyboardInterrupt:
