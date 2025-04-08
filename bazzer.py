@@ -10,7 +10,7 @@ CHAT_ID = '5834504059'                                    # Ganti dengan chat ID
 # ====== SETUP PIR DAN BUZZER ======
 GPIO.setmode(GPIO.BOARD)
 PIR_PIN = 13
-BUZZER_PIN = 12
+BUZZER_PIN = 11
 
 GPIO.setup(PIR_PIN, GPIO.IN)
 GPIO.setup(BUZZER_PIN, GPIO.OUT)
