@@ -1,15 +1,11 @@
-from picamera2 import Picamera2
-import time
+import subprocess
 
-picam2 = Picamera2()
+print("Mulai rekam selama 10 detik...")
 
-# Konfigurasi video
-config = picam2.create_video_configuration()
-picam2.configure(config)
+subprocess.run([
+    "libcamera-vid",
+    "-t", "10000",              # durasi 10 detik
+    "-o", "video_debian.h264"   # nama file output
+])
 
-# Start dan rekam
-picam2.start_recording("video_night.h264")
-print("Recording 10 seconds...")
-time.sleep(10)
-picam2.stop_recording()
-print("Recording selesai.")
+print("Rekaman selesai!")
