@@ -4,8 +4,8 @@ import requests
 import os
 
 # ====== SETUP BOT TELEGRAM ======
-TOKEN = '7401509957:AAHcQs86n2go2A9sB-soTEbtlPPaQkGwiOE'   # Ganti dengan token kamu
-CHAT_ID = '5834504059'                                    # Ganti dengan chat ID kamu
+TELEGRAM_BOT_TOKEN = "7401509957:AAHcQs86n2go2A9sB-soTEbtlPPaQkGwiOE"
+TELEGRAM_CHAT_ID = "5834504059"
 
 # ====== SETUP PIR DAN BUZZER ======
 GPIO.setmode(GPIO.BOARD)
