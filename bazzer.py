@@ -53,7 +53,7 @@ try:
 
             # Kirim ke Telegram
             kirim_telegram_pesan("🚨 Gerakan terdeteksi! Mengirim foto...")
-            kirim_telegram_foto(filename)
+            # kirim_telegram_foto(filename)
 
             GPIO.output(BUZZER_PIN, GPIO.LOW)
             time.sleep(5)  # Tunggu sebelum deteksi lagi
