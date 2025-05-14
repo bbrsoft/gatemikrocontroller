@@ -49,7 +49,7 @@ try:
 
             # Ambil gambar dari kamera
             filename = "deteksi.jpg"
-            os.system(f"libcamera-still -t 1000 -o {filename}")
+            # os.system(f"libcamera-still -t 1000 -o {filename}")
 
             # Kirim ke Telegram
             kirim_telegram_pesan("🚨 Gerakan terdeteksi! Mengirim foto...")
