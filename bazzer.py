@@ -4,8 +4,8 @@ import requests
 import os
 
 # ====== SETUP BOT TELEGRAM ======
-TELEGRAM_BOT_TOKEN = "7401509957:AAHcQs86n2go2A9sB-soTEbtlPPaQkGwiOE"
-TELEGRAM_CHAT_ID = "5834504059"
+TELEGRAM_BOT_TOKEN = "8015834378:AAFLaVw2i4fiO1HClJN17z-mZRJkfq75Zdk"  # Ganti dengan token bot Telegram kamu
+TELEGRAM_CHAT_ID = "7081662147"
 
 # ====== SETUP PIR DAN BUZZER ======
 GPIO.setmode(GPIO.BOARD)
