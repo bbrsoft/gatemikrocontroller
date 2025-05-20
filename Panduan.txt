@@ -1,0 +1,30 @@
+Cara jalankan 
+-------------------------------------------------------------------
+ - pir.py dengan python3 pir.py
+ - pastikan pin di pir ke raspi 5 nya
+	✅ 1. Cek Wiring (Kabel) PIR Sensor
+	Pastikan 3 pin sensor PIR kamu terhubung seperti ini:
+	PIR Pin	Terhubung ke Raspberry Pi
+	VCC	5V (pin 2 atau 4)
+	GND	GND (pin 6)
+	OUT	GPIO 13 (pin 33)
+
+  - akan terbuka commanline baru menjalankan yolo_raspi_imou.py secara automatis dan notif video 10 detik serta message ketelegram
+
+
+cara buka Enviroment python
+------------------------------------------------------------------
+source env/bin/activate
+
+--------------------------------------------------------------------
+cara jalankan file imou.py
+-source env/bin/activate
+-(env) pi@raspberrypi:~/gatemicro $ python imou.py 
+----------------------------------------------------------------
+
+cara jalankan yolo_imou.py
+(env) pi@raspberrypi:~/gatemicro $ python yolo_raspi_imou.py 
+--------------------------------------------------------------------
+
+
+

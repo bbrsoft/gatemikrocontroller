@@ -4,12 +4,12 @@ import subprocess
 import json
 
 # API credentials Telegram
-api_id = 27073056  
-api_hash = '37aee272fb897da2b418935a8c79b727'
-phone = '+6282169419513'
+api_id = 21508130  
+api_hash = 'df34c286ae21ae3111c073fab928167c'
+phone = '+6281127000212'
 
 # Username bot target
-bot_username = '@startupvinicibot'
+bot_username = '@B16AIG_bot'
 
 client = TelegramClient('session_name', api_id, api_hash)
 
@@ -19,7 +19,7 @@ async def new_message_handler(event):
     print(f"📩 Pesan baru dari bot: {text}")
 
     # Jika mendeteksi pesan notif gerakan
-    if "🚨 Gerakan terdeteksi! Mengirim foto..." in text:
+    if "🚨 Gerakan terdeteksi!" in text:
         print("🚨 Menjalankan YOLO selama 5 detik...")
         process = subprocess.Popen(["python", "yolo_raspi_imou.py"])
         time.sleep(5)

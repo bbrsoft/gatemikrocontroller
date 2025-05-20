@@ -1,13 +1,34 @@
 from ultralytics import YOLO
 import cv2
 import pygame
+import time
+import requests
+import os
+
+# ===== TELEGRAM SETUP =====
+TELEGRAM_BOT_TOKEN = "8015834378:AAFLaVw2i4fiO1HClJN17z-mZRJkfq75Zdk"
+TELEGRAM_CHAT_ID = "7081662147"
+
+def kirim_telegram_video(path_video):
+    """Fungsi untuk kirim video ke Telegram"""
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendVideo"
+    with open(path_video, 'rb') as f:
+        files = {'video': f}
+        data = {'chat_id': TELEGRAM_CHAT_ID}
+        try:
+            response = requests.post(url, files=files, data=data)
+            if response.ok:
+                print("📤 Video berhasil dikirim ke Telegram.")
+            else:
+                print("❌ Gagal mengirim video:", response.text)
+        except Exception as e:
+            print("❌ Error kirim video:", e)
 
 # Load Model YOLO
 model = YOLO("yolov8n.pt")
 
 # Buka Kamera
-cap = cv2.VideoCapture(1)
-# cap = cv2.VideoCapture("rtsp://admin:L255EE02@192.168.0.108:554/cam/realmonitor?channel=1&subtype=0")
+cap = cv2.VideoCapture("rtsp://admin:L255EE02@192.168.0.108:554/cam/realmonitor?channel=1&subtype=0")
 
 # Inisialisasi suara
 pygame.mixer.init()
@@ -46,6 +67,17 @@ def calculate_real_height(focal_length, real_distance, image_height):
 focal_length = 500  # Panjang fokal dalam piksel, sesuaikan dengan kamera
 real_height = 170  # Tinggi objek nyata dalam cm (misalnya manusia)
 
+# Nama file video yang akan direkam
+video_filename = "deteksi_video.mp4"
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+frame_height, frame_width = frame.shape[:2]  # balik karena (height, width)
+out = cv2.VideoWriter(video_filename, fourcc, 20.0, (frame_width, frame_height))
+
+
+# Flag untuk mulai rekaman
+start_time = None
+recording = False
+
 while True:
     ret, frame = cap.read()
     if not ret:
@@ -64,26 +96,9 @@ while True:
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
                 cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
-                
                 # Jika objek masuk ke dalam kotak merah
                 if x1 < box_x2 and x2 > box_x1 and y1 < box_y2 and y2 > box_y1:
                     warning = True  
-
-
-            # Menghitung tinggi objek dalam gambar (dalam piksel)
-            image_height = y2 - y1
-            
-            # Menghitung jarak objek ke kamera
-            distance = calculate_distance(focal_length, real_height, image_height)
-            
-            # Menampilkan jarak objek pada frame
-            cv2.putText(frame, f"Jarak: {distance:.2f} cm", (x1, y2 + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 2)
-
-            # Menghitung perkiraan tinggi objek berdasarkan jarak
-            estimated_height = calculate_real_height(focal_length, distance, image_height)
-            
-            # Menampilkan perkiraan tinggi objek di dunia nyata
-            cv2.putText(frame, f"Tinggi: {estimated_height:.2f} cm", (x1, y2 + 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 2)
 
     # Gambar kotak merah di tengah layar
     cv2.rectangle(frame, (box_x1, box_y1), (box_x2, box_y2), (0, 0, 255), 2)
@@ -91,19 +106,31 @@ while True:
     # Jika ada objek yang masuk ke dalam kotak, tampilkan peringatan dan mainkan suara
     if warning:
         cv2.putText(frame, "WARNING!", (frame_width // 3, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
-        if not sound_playing:
+        if not recording:
+            print("🚨 Objek terdeteksi di area peringatan! Mulai merekam...")
+            recording = True
+            start_time = time.time()
             pygame.mixer.music.play(-1)  # Putar suara terus-menerus
-            sound_playing = True
-    else:
-        if sound_playing:
-            pygame.mixer.music.stop()  # Hentikan suara
-            sound_playing = False
+
+    if recording:
+        out.write(frame)  # Rekam frame ke file video
+        if time.time() - start_time >= 50:  # Rekam selama 5 detik
+            print("⏱️ Rekaman selesai 10 detik.")
+            break
 
     cv2.imshow("Cam Detection", frame)
     
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
+# Cleanup dan kirim video ke Telegram
 cap.release()
+out.release()
 cv2.destroyAllWindows()
+pygame.mixer.music.stop()
+
+if recording:
+    kirim_telegram_video(video_filename)  # Kirim video ke Telegram
+    #os.remove(video_filename)  # Hapus video setelah dikirim
+    time.sleep(50)
 pygame.mixer.quit()
