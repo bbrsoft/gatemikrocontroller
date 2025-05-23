@@ -123,10 +123,18 @@ while True:
     if warning:
         cv2.putText(frame, "WARNING!", (frame_width // 3, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
         if not recording:
-            print("🚨 Objek terdeteksi di area peringatan! Mulai merekam...")
+            print("🚨 Objek terdeteksi di area peringatan! Mulai merekam dan kirim foto...")
             recording = True
             start_time = time.time()
             pygame.mixer.music.play(-1)  # Putar suara terus-menerus
+    
+            # Simpan frame sebagai gambar
+            warning_image_path = "warning_capture.jpg"
+            cv2.imwrite(warning_image_path, frame)
+    
+            # Kirim foto ke Telegram
+            kirim_telegram_foto(warning_image_path)
+
 
     if recording:
         out.write(frame)  # Rekam frame ke file video
