@@ -24,6 +24,22 @@ def kirim_telegram_video(path_video):
         except Exception as e:
             print("❌ Error kirim video:", e)
 
+def kirim_telegram_foto(path_foto):
+    """Fungsi untuk kirim foto ke Telegram"""
+    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto"
+    with open(path_foto, 'rb') as f:
+        files = {'photo': f}
+        data = {'chat_id': TELEGRAM_CHAT_ID}
+        try:
+            response = requests.post(url, files=files, data=data)
+            if response.ok:
+                print("📸 Foto berhasil dikirim ke Telegram.")
+            else:
+                print("❌ Gagal mengirim foto:", response.text)
+        except Exception as e:
+            print("❌ Error kirim foto:", e)
+
+
 # Load Model YOLO
 model = YOLO("yolov8n.pt")
 
