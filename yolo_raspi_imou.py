@@ -93,6 +93,7 @@ out = cv2.VideoWriter(video_filename, fourcc, 20.0, (frame_width, frame_height))
 # Flag untuk mulai rekaman
 start_time = None
 recording = False
+person_in_warning_zone = False  # Flag khusus untuk person
 
 while True:
     ret, frame = cap.read()
@@ -115,9 +116,25 @@ while True:
                 # Jika objek masuk ke dalam kotak merah
                 if x1 < box_x2 and x2 > box_x1 and y1 < box_y2 and y2 > box_y1:
                     warning = True  
+                if label == "person" and x1 < box_x2 and x2 > box_x1 and y1 < box_y2 and y2 > box_y1:
+                    person_in_warning_zone = True
 
     # Gambar kotak merah di tengah layar
     cv2.rectangle(frame, (box_x1, box_y1), (box_x2, box_y2), (0, 0, 255), 2)
+
+    if person_in_warning_zone:
+        cv2.putText(frame, "WARNING!", (frame_width // 3, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
+        if not recording:
+            print("🚨 PERSON terdeteksi di area peringatan! Mulai merekam dan kirim foto...")
+            recording = True
+            start_time = time.time()
+            pygame.mixer.music.play(-1)  # Suara alarm
+
+            warning_image_path = "warning_capture.jpg"
+            cv2.imwrite(warning_image_path, frame)
+
+            kirim_telegram_foto(warning_image_path, caption="🚨 Deteksi orang masuk area larangan!")
+
 
     # Jika ada objek yang masuk ke dalam kotak, tampilkan peringatan dan mainkan suara
     if warning:
